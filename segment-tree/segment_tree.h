@@ -4,18 +4,22 @@
 
 using std::vector;
 
+enum query { RMQ, SUM };
+
 template <typename T>
 class SegmentTree {
   vector<T> seg;
   vector<T> data;
 public:
-  SegmentTree(vector<T> arr);
-  int rmq(int start, int end); // range minimum query
+  SegmentTree(vector<T> arr, query type = RMQ);
+  int rmq(int start, int end); // range minimum query (index)
+  T range_sum(int start, int end); // sum of range
 private:
   int left(int root);
   int right(int root);
   int query(int p, int seg_start, int seg_end, int i, int j);
-  void build(int p, int start, int end);
+  T sum(int p, int seg_start, int seg_end, int i, int j);
+  void build(int p, int start, int end, enum query type);
   bool inside(int seg_start, int seg_end, int i, int j);
   bool outside(int seg_start, int seg_end, int i, int j);
 };
