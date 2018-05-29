@@ -32,10 +32,14 @@ T sum(vector<T> data, int start, int end) {
 
 namespace {
   TEST(RmqTest, EntireArray) {
-    vector<int> data = { 1, 2, 3, 4, 5, 6, 7 };
-    SegmentTree<int> seg_tree(data);
-    int start = 0, end = data.size() - 1; 
-    EXPECT_EQ(seg_tree.rmq(start, end), rmq(data, start, end));
+    vector<int> data_int = { 1, 2, 3, 4, 5, 6, 7 };
+    SegmentTree<int> seg_tree_int(data_int);
+    int start = 0, end = data_int.size() - 1; 
+    EXPECT_EQ(seg_tree_int.rmq(start, end), rmq(data_int, start, end));
+    vector<double> data_double = { 1.5, 2.5, 3.5, 4.5};
+    SegmentTree<double> seg_tree_double(data_double);
+    start = 0, end = data_double.size() - 1;
+    EXPECT_EQ(seg_tree_double.rmq(start, end), rmq(data_double, start, end));    
   }
   TEST(RmqTest, Middle2Elements) {
     vector<int> data = { 1, 2, 3, 4, 5, 6, 7 };
@@ -66,5 +70,23 @@ namespace {
     SegmentTree<int> seg_tree(data, SUM);
     int start = 2, end = 4; 
     EXPECT_EQ(seg_tree.range_sum(start, end), sum(data, start, end));
+  }
+  TEST(UpdateTest, FirstElement) {
+    vector<int> data = { 1, 2, 3, 4, 5, 6, 7 };
+    SegmentTree<int> seg_tree(data, RMQ);
+    int start = 0, end = data.size() - 1;
+    int idx = 0, value = 8;
+    seg_tree.update(idx, value);
+    data[idx] = value;
+    EXPECT_EQ(seg_tree.rmq(start, end), rmq(data, start, end));
+  }
+  TEST(UpdateTest, MiddleElement) {
+    vector<int> data = { 4, 2, 3, 1, 5, 6, 7 };
+    SegmentTree<int> seg_tree(data, RMQ);
+    int start = 0, end = data.size() - 1;
+    int idx = data.size() / 2, value = 8;
+    seg_tree.update(idx, value);
+    data[idx] = value;
+    EXPECT_EQ(seg_tree.rmq(start, end), rmq(data, start, end));
   }
 }
