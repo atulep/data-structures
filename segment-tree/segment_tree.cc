@@ -97,6 +97,32 @@ void SegmentTree<T>::update_util(int p, int seg_start, int seg_end, int i) {
 }
 
 template <typename T>
+void SegmentTree<T>::update_range_util(int p, int seg_start, int seg_end, int i, int j) {
+  if (seg_start == seg_end) {
+    seg[p] = data[seg_start];
+    return;
+  }
+  if (outside(seg_start, seg_end, i, j)) {
+    return;
+  }
+  int mid = (seg_start + seg_end) / 2;
+  update_range_util(left(p), seg_start, mid, i, j);
+  update_range_util(right(p), mid + 1, seg_end, i, j);
+  switch (type) {
+    case RMQ:
+      if (data[seg[left(p)]] < data[seg[right(p)]]) {
+        seg[p] = seg[left(p)];
+      } else {
+        seg[p] = seg[right(p)];
+      }
+      break;
+    case SUM:
+      seg[p] = seg[left(p)] + seg[right(p)];
+      break;
+  }
+}
+
+template <typename T>
 int SegmentTree<T>::rmq(int i, int j) {
   return query(1, 0, data.size()-1, i, j);
 }
@@ -111,5 +137,14 @@ void SegmentTree<T>::update(int idx, T val) {
   data[idx] = val;
   update_util(1, 0, data.size()-1, idx);
 }
+
+template <typename T>
+void SegmentTree<T>::update_range(int start, int end, T val) {
+  for (int i = start; i <= end; ++i) {
+    data[i] = val;
+  }
+  update_range_util(1, 0, data.size()-1, start, end);
+}
+
 template class SegmentTree<int>;
 template class SegmentTree<double>;

@@ -16,6 +16,7 @@ public:
   int rmq(int start, int end); // range minimum query (index)
   T range_sum(int start, int end); // sum of range
   void update(int idx, T value);
+  void update_range(int start, int end, T val);
 private:
   int left(int root);
   int right(int root);
@@ -25,6 +26,7 @@ private:
   bool inside(int seg_start, int seg_end, int i, int j);
   bool outside(int seg_start, int seg_end, int i, int j);
   void update_util(int p, int seg_start, int seg_end, int i);
+  void update_range_util(int p, int seg_start, int seg_end, int i, int j);
 };
 
 template <typename T>

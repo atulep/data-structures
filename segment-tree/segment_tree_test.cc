@@ -89,4 +89,15 @@ namespace {
     data[idx] = value;
     EXPECT_EQ(seg_tree.rmq(start, end), rmq(data, start, end));
   }
+
+  TEST(UpdateRangeTest, MiddleElements) {
+    vector<int> data = { 4, 2, 3, 1, 5, 6, 7 };
+    SegmentTree<int> seg_tree(data, SUM);
+    int start = 2, end = 4, value = 8;
+    seg_tree.update_range(start, end, value);
+    for (int i = start; i <= end; ++i) {
+      data[i] = value;
+    }
+    EXPECT_EQ(seg_tree.range_sum(start, end), sum(data, start, end));
+  }
 }
